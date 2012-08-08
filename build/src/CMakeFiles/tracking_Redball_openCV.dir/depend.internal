@@ -83,4 +83,3 @@ src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.o
  /opt/ros/fuerte/stacks/image_common/image_transport/include/image_transport/single_subscriber_publisher.h
  /opt/ros/fuerte/stacks/image_common/image_transport/include/image_transport/subscriber.h
  /opt/ros/fuerte/stacks/image_common/image_transport/include/image_transport/transport_hints.h
- /opt/ros/fuerte/stacks/vision_opencv/cv_bridge/include/cv_bridge/cv_bridge.h
