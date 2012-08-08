@@ -46,7 +46,7 @@ public:
 
 
   ImageConverter()
-    : it_(nh_), dist(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(80)
+    : it_(nh_), dist(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(120)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -156,7 +156,8 @@ public:
 
   void imageCb(const sensor_msgs::ImageConstPtr& msg)
   {
-    ros::Time start = ros::Time::now();
+
+    //ros::Time start = ros::Time::now();
     cv_bridge::CvImagePtr cv_ptr;
     try
     {
@@ -200,6 +201,7 @@ public:
     int no_ellipse(0);
     for( int i(0); i< (contours.size()); i++ )
     {
+
       if( contours[i].size() < 25 ) continue;
       cv::drawContours( cv_ptr->image, contours, i, cv::Scalar(255,0,0), 1, 8 );
       cv::Moments moms = cv::moments( cv::Mat(contours[i]));
@@ -239,12 +241,12 @@ public:
 
         robot_posX = posX;
         robot_posY = posY;
-
       }
       //std::cout << "circularity " << circularity << std::endl;
     }
 
     cmd_command();
+
 
 
     //cv::Rect rect(320-40, 240-30, 80, 60);
@@ -253,9 +255,16 @@ public:
     cv::imshow("threshold", threshold_frame);
     cv::waitKey(3);
 
-    ros::Time now = ros::Time::now();
+    //ros::Time now = ros::Time::now();
     //std::cout << "processing time : " << now - start << " sec" << std::endl;
     image_pub_.publish(cv_ptr->toImageMsg());
+  }
+
+  void test()
+  {
+    geometry_msgs::Twist cmd;
+    cmd.angular.z = 0.2;
+    cmd_vel_pub.publish(cmd);
   }
 
   void cmd_command()
@@ -263,7 +272,7 @@ public:
     geometry_msgs::Twist cmd;
 
     if (dist < 200 && dist > minDetect) {
-      cmd.linear.x = dist/100;
+      cmd.linear.x = 0.2;
       if (robot_posX > width_center) {
         cmd.angular.z = -0.3;
       } else if (robot_posX < width_center) {
@@ -272,20 +281,19 @@ public:
         cmd.angular.z = 0.0;
       }
       cmd_vel_pub.publish(cmd);
-      std::cout << "dist : " << dist << " " << "detecting ball" << "vel_x : " << cmd.linear.x << " " << "vel_z" << cmd.linear.z << std::endl;
+      std::cout << "dist : " << dist << " " << "detecting ball" << " " << "vel_x : " << cmd.linear.x << " " << "vel_z" << " " << cmd.angular.z << std::endl;
     }
 
     else if (dist < minDetect && dist > 70) {
       std::cout << "dist : " << dist << " " << "stop command" << std::endl;
       //cmd.angular.z = 0.0;
-      cmd.linear.x = 0.0;
-      cmd_vel_pub.publish(cmd);
-      //dist = 0;
+      //cmd.linear.x = 0.0;
+      cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
     }
 
     else {
       std::cout << "dist : " << dist << " " << "rotation" << std::endl;
-      cmd.angular.z = 0.3;
+      cmd.angular.z = 0.5;
       cmd_vel_pub.publish(cmd);
     }
   }
@@ -295,6 +303,7 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "image_converter");
   ImageConverter ic;
+
 
   ros::spin();
   return 0;
