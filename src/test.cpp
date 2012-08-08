@@ -39,14 +39,9 @@ private :
 public:
   cv::Mat threshold_frame;
   int dist;
-  int width_center;
-  int robot_posX;
-  int robot_posY;
-  int minDetect;
-
 
   ImageConverter()
-    : it_(nh_), dist(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(80)
+    : it_(nh_), dist(0)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -54,7 +49,7 @@ public:
     image_pub_ = it_.advertise("out", 1);
     //image_sub_ = it_.subscribe("in", 1, &ImageConverter::imageCb, this, image_transport::TransportHints("compressed"));
     image_sub_ = it_.subscribe("camera/rgb/image_color", 1, &ImageConverter::imageCb, this);
-    cmd_vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel",1);
+    cmd_vel_pub = nh.advertise<geometry_msgs::Twist>("cmd_vel",1);
   }
 
   ~ImageConverter()
@@ -112,8 +107,7 @@ public:
       // range Saturation       : 0 ~ 100
       // range Value(intensity) : 0 ~ 100
 
-      // 1 byte                 : 0 ~ 25
-       * 5
+      // 1 byte                 : 0 ~ 255
       // real range Hue         : 0 ~ 180 (Hue/2)
 
       avg_hue += (*it)[0];              // hue value
@@ -175,7 +169,6 @@ public:
     cv::Mat kernel = cv::getStructuringElement(2, cv::Size( 3, 3 ), cv::Point( -1, -1 ));
 
     // Dilate the image
-
     cv::dilate(threshold_frame, dilated, kernel, cv::Point(-1,-1), 5);
 
     // Erode the image
@@ -200,7 +193,7 @@ public:
     int no_ellipse(0);
     for( int i(0); i< (contours.size()); i++ )
     {
-      if( contours[i].size() < 25 ) continue;
+      if( contours[i].size() < 50 ) continue;
       cv::drawContours( cv_ptr->image, contours, i, cv::Scalar(255,0,0), 1, 8 );
       cv::Moments moms = cv::moments( cv::Mat(contours[i]));
       double area = moms.m00;
@@ -208,7 +201,7 @@ public:
       double circularity = 4*CV_PI*area/(perimeter*perimeter);
 
 
-      if( circularity > 0.65 )
+      if( circularity > 0.3 )
       {
         cv::RotatedRect ellipse_candidate = cv::fitEllipse( cv::Mat(contours[i]) );
         cv::ellipse( cv_ptr->image, ellipse_candidate, cv::Scalar(0,255,0), 2, 8 );
@@ -223,22 +216,7 @@ public:
 
         double f= 700;
         dist = 3 * f / radius_i;
-        std::cout << "find the ball | dist : " << double(dist) << std::endl;
-        //printf("R | Z = %f | %f\n", radius_i, double(dist) );
-
-
-        // ball centroid
-        cv::Moments mom = cv::moments(threshold_frame);
-        cv::circle(cv_ptr->image, cv::Point(mom.m10/mom.m00, mom.m01/mom.m00), 10, cv::Scalar(0.8, 0.2, 0.2), 2);
-        //double start = ros::Time::now().toSec();std::cout << "position : " << mom.m10/mom.m00 << ", " << mom.m01/mom.m00 << std::endl;
-        static int posX = 0;
-        static int posY = 0;
-
-        posX = mom.m10/mom.m00;
-        posY = mom.m01/mom.m00;
-
-        robot_posX = posX;
-        robot_posY = posY;
+        printf("R | Z = %f | %f\n", radius_i, double(dist) );
 
       }
       //std::cout << "circularity " << circularity << std::endl;
@@ -256,39 +234,24 @@ public:
     ros::Time now = ros::Time::now();
     //std::cout << "processing time : " << now - start << " sec" << std::endl;
     image_pub_.publish(cv_ptr->toImageMsg());
+
   }
 
   void cmd_command()
   {
-    geometry_msgs::Twist cmd;
+    geometry_msgs::Twist twist;
 
-    if (dist < 200 && dist > minDetect) {
-      cmd.linear.x = dist/100;
-      if (robot_posX > width_center) {
-        cmd.angular.z = -0.3;
-      } else if (robot_posX < width_center) {
-        cmd.angular.z = 0.3;
-      } else if (robot_posX == width_center) {
-        cmd.angular.z = 0.0;
-      }
-      cmd_vel_pub.publish(cmd);
-      std::cout << "dist : " << dist << " " << "detecting ball" << "vel_x : " << cmd.linear.x << " " << "vel_z" << cmd.linear.z << std::endl;
-    }
-
-    else if (dist < minDetect && dist > 70) {
-      std::cout << "dist : " << dist << " " << "stop command" << std::endl;
-      //cmd.angular.z = 0.0;
-      cmd.linear.x = 0.0;
-      cmd_vel_pub.publish(cmd);
+    if (dist < 100 && dist > 0) {
+      std::cout << "dist : " << dist << " " << "detecting ball & stop command" << std::endl;
+      twist.angular.z = 0.0;
+      cmd_vel_pub.publish(twist);
       //dist = 0;
-    }
-
-    else {
-      std::cout << "dist : " << dist << " " << "rotation" << std::endl;
-      cmd.angular.z = 0.3;
-      cmd_vel_pub.publish(cmd);
+    } else {
+      twist.angular.z = 0.25;
+      cmd_vel_pub.publish(twist);
     }
   }
+
 };
 
 int main(int argc, char** argv)
@@ -299,4 +262,3 @@ int main(int argc, char** argv)
   ros::spin();
   return 0;
 }
-
