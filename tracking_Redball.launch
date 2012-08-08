@@ -1,0 +1,9 @@
+<launch>
+
+	<node pkg="minsu_opencv" name="image_converter" type="tracking_Redball_openCV" output="screen" >
+		<!--remap from="in" to="/gscam/image_raw" /--> 
+		<!--remap from="in" to="camera/rgb/image_color" /-->
+		<param name="_image_transport" value="compressed" type="string" />
+	</node>
+
+</launch>

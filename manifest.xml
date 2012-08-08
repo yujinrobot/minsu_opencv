@@ -1,0 +1,20 @@
+<package>
+  <description brief="minsu_opencv">
+
+     minsu_opencv
+
+  </description>
+  <author>Control Team Laptop</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/minsu_opencv</url>
+  <depend package="roscpp"/>
+  <depend package="rospy"/>
+  <depend package="std_msgs"/>
+  <depend package="cv_bridge"/>
+  <depend package="opencv2"/>
+  <depend package="image_transport" />
+
+</package>
+
+
