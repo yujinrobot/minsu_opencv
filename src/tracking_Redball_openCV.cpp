@@ -49,7 +49,7 @@ public:
 
 
   ImageConverter()
-    : it_(nh_), width_center(320), robot_posX(0), robot_posY(0), minDetect(85), flag(0)
+    : it_(nh_), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.85), flag(0)
   {
     ros::Time::init();
     ros::Duration du(5.0);
