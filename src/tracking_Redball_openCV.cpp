@@ -176,7 +176,34 @@ i
   void cmd_vel_command()
   {
     geometry_msgs::Twist cmd;
-    if (flag == 0){
+
+    if (flag == 1)
+    {
+      if (depth_Distance < 2 && depth_Distance > minDetect) {
+        //cmd.linear.x = depth_Distance-0.5;
+        cmd.linear.x = 0.3;
+        if (robot_posX > width_center) {
+          //cmd.angular.z = -fabs(robot_posX - width_center)/100;
+          cmd.angular.z = -0.3;
+        } else if (robot_posX < width_center) {
+          //cmd.angular.z = fabs(robot_posX - width_center)/100;
+          cmd.angular.z = 0.3;
+        } else if (robot_posX == width_center) {
+          cmd.angular.z = 0.0;
+        }
+        cmd_vel_pub.publish(cmd);
+        std::cout << "depth_Distance : " << depth_Distance << " " << "detecting ball" << " " << "vel_x : " << cmd.linear.x << " " << "vel_z" << " " << cmd.angular.z << std::endl;
+      }
+
+      else if (depth_Distance < minDetect && depth_Distance > 0.65) {
+        std::cout << "depth_Distance : " << depth_Distance << " " << "stop command" << std::endl;
+        cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
+        depth_Distance = 0;
+      }
+    }
+    // flag = 0
+    else
+    {
       cmd.angular.z = 0.5;
       cmd_vel_pub.publish(cmd);
     }
@@ -269,6 +296,7 @@ i
         pos.position.y = robot_posY;
         pos_pub.publish(pos);
         std::cout << "kobuki find a ball & publish ball position to depth_info node" << std::endl;
+        flag = 1;
         //std::cout << "robot_posX - width_center : " << fabs(robot_posX - width_center)/100 << std::endl;
       }
 
