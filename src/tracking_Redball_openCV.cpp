@@ -239,6 +239,18 @@ i
     // for saving the eroded frame
     clone_eroded = eroded.clone();
 
+    // hough circle algorithm
+    std::vector<cv::Vec3f> circles;
+    cv::HoughCircles(threshold_frame, circles, CV_HOUGH_GRADIENT, 2, 200, 200, 100, 25, 100);
+    std::vector<cv::Vec3f>::const_iterator itc = circles.begin();
+
+    while(itc!=circles.end()) {
+      cv::circle(cv_ptr->image, cv::Point( (*itc)[0], (*itc)[1]) , (*itc)[2], cv::Scalar(255), 2);
+      ++itc;
+    }
+
+
+
     std::vector< std::vector<cv::Point> > contours;     // storage for the contours
     std::vector<cv::Vec4i> hierarchy;                   // hierachyminDetect
 
@@ -278,15 +290,7 @@ i
         //std::cout << "kobuki find the ball | opencv_Distance : " << opencv_Distance << std::endl;
         //printf("R | Z = %f | %f\n", radius_i, double(opencv_Distance) );
 
-        // hough circle algorithm
-        std::vector<cv::Vec3f> circles;
-        cv::HoughCircles(threshold_frame, circles, CV_HOUGH_GRADIENT, 2, 200, 200, 100, 25, 100);
-        std::vector<cv::Vec3f>::const_iterator itc = circles.begin();
 
-        while(itc!=circles.end()) {
-          cv::circle(cv_ptr->image, cv::Point( (*itc)[0], (*itc)[1]) , (*itc)[2], cv::Scalar(255), 2);
-          ++itc;
-        }
 
 
 
