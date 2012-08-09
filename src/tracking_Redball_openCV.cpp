@@ -48,7 +48,7 @@ public:
 
 
   ImageConverter()
-    : it_(nh_), width_center(320), robot_posX(0), robot_posY(0), minDetect(85), depth_Distance(0)
+    : it_(nh_), width_center(320), robot_posX(0), robot_posY(0), minDetect(85)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -229,13 +229,13 @@ i
         no_ellipse ++;
 
         // radius -> {(W+H)/2}/2
-        double radius_i = (ellipse_candidate.size.height+ellipse_candidate.size.width)/4;
+        //double radius_i = (ellipse_candidate.size.height+ellipse_candidate.size.width)/4;
 
         //std::cout << "height : " << std::setw(7) << ellipse_candidate.size.height
         //    << " " << "width : " << std::setw(7) << ellipse_candidate.size.width
         //    << " " << "radius : " << radius_i << std::endl;
 
-        double f= 700;
+        //double f= 700;
         //opencv_Distance = 3 * f / radius_i;
         //std::cout << "kobuki find the ball | opencv_Distance : " << opencv_Distance << std::endl;
         //printf("R | Z = %f | %f\n", radius_i, double(opencv_Distance) );
