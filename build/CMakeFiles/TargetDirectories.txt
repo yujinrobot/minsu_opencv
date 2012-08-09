@@ -8,7 +8,7 @@
 /opt/kobuki/minsu/minsu_opencv/build/CMakeFiles/rospack_genmsg.dir
 /opt/kobuki/minsu/minsu_opencv/build/CMakeFiles/rospack_genmsg_libexe.dir
 /opt/kobuki/minsu/minsu_opencv/build/CMakeFiles/rospack_gensrv.dir
-/opt/kobuki/minsu/minsu_opencv/build/CMakeFiles/test.dir
+/opt/kobuki/minsu/minsu_opencv/build/src/CMakeFiles/test.dir
 /opt/kobuki/minsu/minsu_opencv/build/CMakeFiles/test-future.dir
 /opt/kobuki/minsu/minsu_opencv/build/CMakeFiles/test-results.dir
 /opt/kobuki/minsu/minsu_opencv/build/CMakeFiles/test-results-run.dir

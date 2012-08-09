@@ -1,1 +1,2 @@
 rosbuild_add_executable(tracking_Redball_openCV tracking_Redball_openCV.cpp) 
+rosbuild_add_executable(test test.cpp) 

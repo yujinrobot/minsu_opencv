@@ -4,6 +4,9 @@
 src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.o: ../src/tracking_Redball_openCV.cpp
 src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.o: /opt/ros/fuerte/include/XmlRpcDecl.h
 src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.o: /opt/ros/fuerte/include/XmlRpcValue.h
+src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.o: /opt/ros/fuerte/include/geometry_msgs/Point.h
+src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.o: /opt/ros/fuerte/include/geometry_msgs/Pose.h
+src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.o: /opt/ros/fuerte/include/geometry_msgs/Quaternion.h
 src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.o: /opt/ros/fuerte/include/geometry_msgs/Twist.h
 src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.o: /opt/ros/fuerte/include/geometry_msgs/Vector3.h
 src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.o: /opt/ros/fuerte/include/opencv2/core/core.hpp

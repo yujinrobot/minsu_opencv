@@ -96,6 +96,20 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+src/CMakeFiles/test.dir/rule:
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/test.dir/rule
+.PHONY : src/CMakeFiles/test.dir/rule
+
+# Convenience name for target.
+test: src/CMakeFiles/test.dir/rule
+.PHONY : test
+
+# fast build rule for target.
+test/fast:
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/test.dir/build.make src/CMakeFiles/test.dir/build
+.PHONY : test/fast
+
+# Convenience name for target.
 src/CMakeFiles/tracking_Redball_openCV.dir/rule:
 	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/tracking_Redball_openCV.dir/rule
 .PHONY : src/CMakeFiles/tracking_Redball_openCV.dir/rule
@@ -108,6 +122,21 @@ tracking_Redball_openCV: src/CMakeFiles/tracking_Redball_openCV.dir/rule
 tracking_Redball_openCV/fast:
 	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/tracking_Redball_openCV.dir/build.make src/CMakeFiles/tracking_Redball_openCV.dir/build
 .PHONY : tracking_Redball_openCV/fast
+
+# target to build an object file
+test.o:
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/test.dir/build.make src/CMakeFiles/test.dir/test.o
+.PHONY : test.o
+
+# target to preprocess a source file
+test.i:
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/test.dir/build.make src/CMakeFiles/test.dir/test.i
+.PHONY : test.i
+
+# target to generate assembly for a file
+test.s:
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/test.dir/build.make src/CMakeFiles/test.dir/test.s
+.PHONY : test.s
 
 # target to build an object file
 tracking_Redball_openCV.o:
@@ -132,7 +161,11 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... test"
 	@echo "... tracking_Redball_openCV"
+	@echo "... test.o"
+	@echo "... test.i"
+	@echo "... test.s"
 	@echo "... tracking_Redball_openCV.o"
 	@echo "... tracking_Redball_openCV.i"
 	@echo "... tracking_Redball_openCV.s"
