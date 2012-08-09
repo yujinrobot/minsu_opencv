@@ -45,10 +45,11 @@ public:
   int robot_posX;
   int robot_posY;
   int minDetect;
+  int flag;
 
 
   ImageConverter()
-    : it_(nh_), width_center(320), robot_posX(0), robot_posY(0), minDetect(85)
+    : it_(nh_), width_center(320), robot_posX(0), robot_posY(0), minDetect(85), flag(0)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -172,6 +173,15 @@ i
     }
   }
 
+  void cmd_vel_command()
+  {
+    geometry_msgs::Twist cmd;
+    if (flag == 0){
+      cmd.angular.z = 0.5;
+      cmd_vel_pub.publish(cmd);
+    }
+  }
+
   void imageCb(const sensor_msgs::ImageConstPtr& msg)
   {
     //ros::Time start = ros::Time::now();
@@ -267,6 +277,7 @@ i
         //opencv_Distance = 0;
         robot_posX = 0;
         robot_posY = 0;
+        flag = 0;
         std::cout << "find contour but kobuki can't find the ball" << std::endl;
       }
       //std::cout << "circularity " << circularity << std::endl;
@@ -283,18 +294,6 @@ i
     cv::waitKey(3);
 
     image_pub_.publish(cv_ptr->toImageMsg());
-  }
-
-  void cmd_vel_command()
-  {
-    std::cout << "depth info distance : " << depth_Distance << std::endl;
-    /*
-    geometry_msgs::Twist cmd;
-    if (depth_Distance == 0){
-      cmd.angular.z = 0.5;
-      cmd_vel_pub.publish(cmd);
-    }
-    */
   }
 
   /*
