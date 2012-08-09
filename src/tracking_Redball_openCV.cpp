@@ -48,7 +48,7 @@ public:
 
 
   ImageConverter()
-    : it_(nh_), opencv_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(85), depth_Distance(0)
+    : it_(nh_), width_center(320), robot_posX(0), robot_posY(0), minDetect(85), depth_Distance(0)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -164,13 +164,9 @@ i
   void depthInfoPoseCb(const geometry_msgs::Pose& distance)
   {
     depth_Distance = distance.position.z;
-    geometry_msgs::Twist cmd;
+
     if(!std::isnan(depth_Distance)) {
       std::cout << "depth info distance : " << depth_Distance << std::endl;
-      if (depth_Distance == 0){
-        cmd.angular.z = 0.5;
-        cmd_vel_pub.publish(cmd);
-      }
     } else {
       std::cout << "distance value : [nan]" << std::endl;
     }
@@ -240,7 +236,7 @@ i
         //    << " " << "radius : " << radius_i << std::endl;
 
         double f= 700;
-        opencv_Distance = 3 * f / radius_i;
+        //opencv_Distance = 3 * f / radius_i;
         //std::cout << "kobuki find the ball | opencv_Distance : " << opencv_Distance << std::endl;
         //printf("R | Z = %f | %f\n", radius_i, double(opencv_Distance) );
 
@@ -268,7 +264,7 @@ i
 
       // can't find a ball
       else {
-        opencv_Distance = 0;
+        //opencv_Distance = 0;
         robot_posX = 0;
         robot_posY = 0;
         std::cout << "find contour but kobuki can't find the ball" << std::endl;
@@ -278,7 +274,7 @@ i
     }
     //std::cout << " x : " << robot_posX << " y : " << robot_posY << " opencv_Distance : " << opencv_Distance << std::endl;
 
-    //cmd_command();
+    cmd_vel_command();
 
     //cv::Rect rect(320-40, 240-30, 80, 60);
     //cv::rectangle(cv_ptr->image, rect, cv::Scalar(0,0,255), 5);
@@ -286,10 +282,19 @@ i
     //cv::imshow("threshold", threshold_frame);
     cv::waitKey(3);
 
-    //ros::Time now = ros::Time::now();
-    //std::cout << "processing time : " << now - start << " sec" << std::endl;
     image_pub_.publish(cv_ptr->toImageMsg());
+  }
 
+  void cmd_vel_command()
+  {
+    std::cout << "depth info distance : " << depth_Distance << std::endl;
+    /*
+    geometry_msgs::Twist cmd;
+    if (depth_Distance == 0){
+      cmd.angular.z = 0.5;
+      cmd_vel_pub.publish(cmd);
+    }
+    */
   }
 
   /*
