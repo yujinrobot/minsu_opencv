@@ -48,7 +48,7 @@ public:
 
 
   ImageConverter()
-    : it_(nh_), opencv_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(85), detection(false)
+    : it_(nh_), opencv_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(85), depth_Distance(0)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -164,8 +164,13 @@ i
   void depthInfoPoseCb(const geometry_msgs::Pose& distance)
   {
     depth_Distance = distance.position.z;
+    geometry_msgs::Twist cmd;
     if(!std::isnan(depth_Distance)) {
       std::cout << "depth info distance : " << depth_Distance << std::endl;
+      if (depth_Distance == 0){
+        cmd.angular.z = 0.5;
+        cmd_vel_pub.publish(cmd);
+      }
     } else {
       std::cout << "distance value : [nan]" << std::endl;
     }
@@ -287,6 +292,7 @@ i
 
   }
 
+  /*
   // based on depth information
   void cmd_command()
   {
@@ -320,6 +326,7 @@ i
       cmd_vel_pub.publish(cmd);
     }
   }
+  */
 
   /*
   // based on openCV
