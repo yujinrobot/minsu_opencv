@@ -293,11 +293,14 @@ i
     geometry_msgs::Twist cmd;
 
     if (depth_Distance < 2 && depth_Distance > minDetect) {
-      cmd.linear.x = depth_Distance-0.5;
+      //cmd.linear.x = depth_Distance-0.5;
+      cmd.linear.x = 0.3;
       if (robot_posX > width_center) {
-        cmd.angular.z = -fabs(robot_posX - width_center)/100;
+        //cmd.angular.z = -fabs(robot_posX - width_center)/100;
+        cmd.angular.z = -0.3;
       } else if (robot_posX < width_center) {
-        cmd.angular.z = fabs(robot_posX - width_center)/100;
+        //cmd.angular.z = fabs(robot_posX - width_center)/100;
+        cmd.angular.z = 0.3;
       } else if (robot_posX == width_center) {
         cmd.angular.z = 0.0;
       }
