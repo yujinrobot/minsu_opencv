@@ -49,7 +49,7 @@ public:
 
 
   ImageConverter()
-    : it_(nh_), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.85), flag(0)
+    : it_(nh_), depth_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.85), flag(0)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -198,9 +198,10 @@ i
       else if (depth_Distance < minDetect && depth_Distance > 0.65) {
         std::cout << "depth_Distance : " << depth_Distance << " " << "stop command" << std::endl;
         cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
-        depth_Distance = 0;
+        //depth_Distance = 0;
       }
     }
+
     // flag = 0
     else
     {
@@ -277,10 +278,24 @@ i
         //std::cout << "kobuki find the ball | opencv_Distance : " << opencv_Distance << std::endl;
         //printf("R | Z = %f | %f\n", radius_i, double(opencv_Distance) );
 
+        // hough circle algorithm
+        std::vector<cv::Vec3f> circles;
+        cv::HoughCircles(threshold_frame, circles, CV_HOUGH_GRADIENT, 2, 200, 200, 100, 25, 100);
+        std::vector<cv::Vec3f>::const_iterator itc = circles.begin();
+
+        while(itc!=circles.end()) {
+          cv::circle(cv_ptr->image, cv::Point( (*itc)[0], (*itc)[1]) , (*itc)[2], cv::Scalar(255), 2);
+          ++itc;
+        }
+
+
+
+
+
         // ball centroid
         cv::Moments mom = cv::moments(threshold_frame);
         cv::circle(cv_ptr->image, cv::Point(mom.m10/mom.m00, mom.m01/mom.m00), 10, cv::Scalar(0.8, 0.2, 0.2), 2);
-        //double start = ros::Time::now().toSec();std::cout << "position : " << mom.m10/mom.m00 << ", " << mom.m01/mom.m00 << std::endl;
+
         static int posX = 0;
         static int posY = 0;
 
@@ -318,6 +333,7 @@ i
     //cv::Rect rect(320-40, 240-30, 80, 60);
     //cv::rectangle(cv_ptr->image, rect, cv::Scalar(0,0,255), 5);
     cv::imshow("origin", cv_ptr->image);
+
     //cv::imshow("threshold", threshold_frame);
     cv::waitKey(3);
 
