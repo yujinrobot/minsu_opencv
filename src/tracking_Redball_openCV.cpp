@@ -45,11 +45,10 @@ public:
   int robot_posX;
   int robot_posY;
   int minDetect;
-  int flag;
 
 
   ImageConverter()
-    : it_(nh_), depth_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.85), flag(0)
+    : it_(nh_), depth_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.85)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -163,38 +162,28 @@ i
   {
     geometry_msgs::Twist cmd;
 
-    if (flag == 1)
-    {
-      if (depth_Distance < 2 && depth_Distance > minDetect) {
-        //cmd.linear.x = depth_Distance-0.5;
-        cmd.linear.x = 0.3;
-        if (robot_posX > width_center) {
-          //cmd.angular.z = -fabs(robot_posX - width_center)/100;
-          cmd.angular.z = -0.3;
-        } else if (robot_posX < width_center) {
-          //cmd.angular.z = fabs(robot_posX - width_center)/100;
-          cmd.angular.z = 0.3;
-        } else if (robot_posX == width_center) {
-          cmd.angular.z = 0.0;
-        }
-        cmd_vel_pub.publish(cmd);
-        std::cout << "depth_Distance : " << depth_Distance << " " << "detecting ball" << " " << "vel_x : " << cmd.linear.x << " " << "vel_z" << " " << cmd.angular.z << std::endl;
+    if (depth_Distance < 2 && depth_Distance > minDetect) {
+      //cmd.linear.x = depth_Distance-0.5;
+      cmd.linear.x = 0.3;
+      if (robot_posX > width_center) {
+        //cmd.angular.z = -fabs(robot_posX - width_center)/100;
+        cmd.angular.z = -0.3;
+      } else if (robot_posX < width_center) {
+        //cmd.angular.z = fabs(robot_posX - width_center)/100;
+        cmd.angular.z = 0.3;
+      } else if (robot_posX == width_center) {
+        cmd.angular.z = 0.0;
       }
-
-      else if (depth_Distance < minDetect && depth_Distance > 0.65) {
-        std::cout << "depth_Distance : " << depth_Distance << " " << "stop command" << std::endl;
-        cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
-        //depth_Distance = 0;
-      }
-    }
-
-    // flag = 0
-    else
-    {
-      cmd.angular.z = 0.5;
       cmd_vel_pub.publish(cmd);
+      std::cout << "depth_Distance : " << depth_Distance << " " << "detecting ball" << " " << "vel_x : " << cmd.linear.x << " " << "vel_z" << " " << cmd.angular.z << std::endl;
+    }
+    else if (depth_Distance < minDetect && depth_Distance > 0.65) {
+      std::cout << "depth_Distance : " << depth_Distance << " " << "stop command" << std::endl;
+      cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
+      //depth_Distance = 0;
     }
   }
+
 
   // This call back function received the data which is distance from depth_info(node) using kinect
   // Distance is more exact than distance from opencv
@@ -311,28 +300,33 @@ i
         robot_posX = posX;
         robot_posY = posY;
 
-        // ball position publish
-        geometry_msgs::Pose pos;
-        pos.position.x = robot_posX;
-        pos.position.y = robot_posY;
-        pos_pub.publish(pos);
-        std::cout << "kobuki find a ball & publish ball position to depth_info node" << std::endl;
-        flag = 1;
         //std::cout << "robot_posX - width_center : " << fabs(robot_posX - width_center)/100 << std::endl;
       }
 
-      // can't find a ball
-      else {
-        //opencv_Distance = 0;
-        robot_posX = 0;
-        robot_posY = 0;
-        flag = 0;
-        std::cout << "find contour but kobuki can't find the ball" << std::endl;
-      }
       //std::cout << "circularity " << circularity << std::endl;
       //std::cout << "we have " << contours.size() << " contours --> " << no_ellipse << " found" << std::endl;
+      //std::cout << " x : " << robot_posX << " y : " << robot_posY << " opencv_Distance : " << opencv_Distance << std::endl;
     }
-    //std::cout << " x : " << robot_posX << " y : " << robot_posY << " opencv_Distance : " << opencv_Distance << std::endl;
+
+
+    if (no_ellipse > 0 && no_ellipse < 2) {
+      // ball position publish
+      geometry_msgs::Pose pos;
+      pos.position.x = robot_posX;
+      pos.position.y = robot_posY;
+      pos_pub.publish(pos);
+      std::cout << "kobuki find a ball & publish ball position to depth_info node" << std::endl;
+    }
+
+    // can't find a ball
+    else {
+      robot_posX = 0;
+      robot_posY = 0;
+      std::cout << "find contour but kobuki can't find the ball" << std::endl;
+    }
+
+
+
 
     //cmd_vel_command();
 
@@ -346,6 +340,7 @@ i
 
     image_pub_.publish(cv_ptr->toImageMsg());
   }
+
 
   /*
   // based on depth information
