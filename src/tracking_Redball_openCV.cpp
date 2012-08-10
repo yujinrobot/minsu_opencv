@@ -315,14 +315,14 @@ i
       pos.position.x = robot_posX;
       pos.position.y = robot_posY;
       pos_pub.publish(pos);
-      std::cout << "kobuki find a ball & publish ball pose : " << pos.position.x << " , " << pos.position.y << std::endl;
+      std::cout << "find a ball & publish ball pose : " << pos.position.x << " , " << pos.position.y << " depth_Dist : "<< depth_Distance << std::endl;
     }
 
     // can't find a ball
     else {
       robot_posX = 0;
       robot_posY = 0;
-      std::cout << "find contour but kobuki can't find the ball" << std::endl;
+      std::cout << "kobuki can't find the ball" << std::endl;
     }
 
 
