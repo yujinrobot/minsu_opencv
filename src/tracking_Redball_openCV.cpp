@@ -80,7 +80,7 @@ public:
     result1.create(frame.rows, frame.cols, CV_8U);
     result2.create(frame.rows, frame.cols, CV_8U);
     result.create(frame.rows, frame.cols, CV_8U);
-    cv::inRange(converted, cv::Scalar(0,100,150), cv::Scalar(4,255,255), result1);
+    cv::inRange(converted, cv::Scalar(0,150,150), cv::Scalar(4,255,255), result1);
     cv::inRange(converted, cv::Scalar(170,150,180),cv::Scalar(179,255,255),result2);
     cv::bitwise_or(result1, result2, result);
 
@@ -231,15 +231,16 @@ i
     cv::Mat kernel = cv::getStructuringElement(2, cv::Size( 3, 3 ), cv::Point( -1, -1 ));
 
     // Dilate the frame
-    cv::dilate(threshold_frame, dilated, kernel, cv::Point(-1,-1), 7);
+    cv::dilate(threshold_frame, dilated, kernel, cv::Point(-1,-1), 5);
 
     // Erode the frame
-    cv::erode(dilated, eroded, kernel, cv::Point(-1,-1), 5);
+    cv::erode(dilated, eroded, kernel, cv::Point(-1,-1), 3);
 
     // for saving the eroded frame
     clone_eroded = eroded.clone();
 
 
+    /*
     // pre-smoothing improves Hough detector
     cv::GaussianBlur(clone_eroded, clone_eroded, cv::Size(3,3), 1.5);
 
@@ -252,7 +253,7 @@ i
       cv::circle(cv_ptr->image, cv::Point( (*itc)[0], (*itc)[1]) , (*itc)[2], cv::Scalar(255), 2);
       ++itc;
     }
-
+    */
 
 
     std::vector< std::vector<cv::Point> > contours;     // storage for the contours
@@ -338,7 +339,8 @@ i
     //cv::rectangle(cv_ptr->image, rect, cv::Scalar(0,0,255), 5);
     cv::imshow("origin", cv_ptr->image);
     cv::imshow("threshold", threshold_frame);
-    cv::imshow("erode", clone_eroded);
+    cv::imshow("dilate", dilated);
+    cv::imshow("erode", eroded);
     cv::waitKey(3);
 
     image_pub_.publish(cv_ptr->toImageMsg());
