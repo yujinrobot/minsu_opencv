@@ -146,7 +146,7 @@ i
 
     std::cout << "R : " << avg_red/frame.size().area() << " " << "G : " << avg_green/frame.size().area() << " "
               << "B : " << avg_blue/frame.size().area()<< std::endl;
-    //std::cout << avg_hue/converted.size().area() << "  " <<  oor << "\n";
+    //std::cout << avg_hue/converted.size().area() << "  " <<  oor << "\n";minDetect
     std::cout << "H : " << avg_hue/converted.size().area() << " " << "S : " << avg_saturation/converted.size().area() << " "
               << "V : " << avg_value/converted.size().area() << std::endl << std::endl;
 
@@ -174,7 +174,7 @@ i
         cmd.angular.z = 0.0;
       }
       cmd_vel_pub.publish(cmd);
-      std::cout << "depth_Distance : " << depth_Distance << " " << "detecting ball" << " " << "vel_x : " << cmd.linear.x << " " << "vel_z" << " " << cmd.angular.z << std::endl;
+      std::cout << "depth_Distance : " << depth_Distance << " " << "detecting ball" << " " << "vel_x : " << cmd.linear.x << " " << "vel_z" << " " << cmd.angular.z << std::endl << std::endl;
     }
 
     else if (depth_Distance < minDetect && depth_Distance > 0.65) {
@@ -194,7 +194,7 @@ i
 
     if(!std::isnan(depth_Distance)) {
       std::cout << "find a ball & publish ball pose" << std::endl;
-      std::cout << "x : " << robot_posX << " y : " << robot_posY << " depth info distance : " << depth_Distance << std::endl << std::endl;
+      std::cout << "x : " << robot_posX << " y : " << robot_posY << " depth info distance : " << depth_Distance << std::endl;
       cmd_vel_command();
     } else {
       std::cout << "distance value : [nan]" << std::endl;
