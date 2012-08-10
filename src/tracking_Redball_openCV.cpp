@@ -47,7 +47,7 @@ public:
   int minDetect;
 
   ImageConverter()
-    : it_(nh_), depth_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.85)
+    : it_(nh_), depth_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.90)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -163,19 +163,20 @@ i
 
     if (depth_Distance < 2 && depth_Distance > minDetect) {
       //cmd.linear.x = depth_Distance-0.5;
-      cmd.linear.x = 0.3;
+      cmd.linear.x = 0.2;
       if (robot_posX > width_center) {
         //cmd.angular.z = -fabs(robot_posX - width_center)/100;
-        cmd.angular.z = -0.3;
+        cmd.angular.z = -0.2;
       } else if (robot_posX < width_center) {
         //cmd.angular.z = fabs(robot_posX - width_center)/100;
-        cmd.angular.z = 0.3;
+        cmd.angular.z = 0.2;
       } else if (robot_posX == width_center) {
         cmd.angular.z = 0.0;
       }
       cmd_vel_pub.publish(cmd);
       std::cout << "depth_Distance : " << depth_Distance << " " << "detecting ball" << " " << "vel_x : " << cmd.linear.x << " " << "vel_z" << " " << cmd.angular.z << std::endl;
     }
+
     else if (depth_Distance < minDetect && depth_Distance > 0.65) {
       std::cout << "depth_Distance : " << depth_Distance << " " << "stop command" << std::endl;
       cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
@@ -192,7 +193,8 @@ i
     depth_Distance = distance.position.z;
 
     if(!std::isnan(depth_Distance)) {
-      std::cout << "x : " << robot_posX << " y : " << robot_posY << " depth info distance : " << depth_Distance << std::endl;
+      std::cout << "find a ball & publish ball pose" << std::endl;
+      std::cout << "x : " << robot_posX << " y : " << robot_posY << " depth info distance : " << depth_Distance << std::endl << std::endl;
       cmd_vel_command();
     } else {
       std::cout << "distance value : [nan]" << std::endl;
@@ -314,7 +316,7 @@ i
       pos.position.x = robot_posX;
       pos.position.y = robot_posY;
       pos_pub.publish(pos);
-      std::cout << "find a ball & publish ball pose : " << pos.position.x << " , " << pos.position.y << std::endl;
+      //std::cout << "find a ball & publish ball pose : " << pos.position.x << " , " << pos.position.y << std::endl;
     }
 
     // can't find a ball
