@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/opt/kobuki/minsu/minsu_opencv/src/test.cpp
+/opt/kobuki/minsu/temp/minsu_opencv/src/test.cpp
 iostream
 -
 string
