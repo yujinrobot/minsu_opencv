@@ -12,9 +12,9 @@
 #include <opencv2/core/core.hpp>        // Basic OpenCV structures (cv::Mat, Scalar)
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Pose.h>
-   
+
 namespace enc = sensor_msgs::image_encodings;
- 
+
 static const char WINDOW[] = "Image window";
 
 class ImageConverter
@@ -59,7 +59,7 @@ public:
     //image_sub_ = it_.subscribe("in", 1, &ImageConverter::imageCb, this, image_transport::TransportHints("compressed"));
 
     pos_pub = nh_.advertise<geometry_msgs::Pose>("ball_info_pose",1);                                   // publish ball position
-    depth_pos_sub = nh_.subscribe("depth_info_dist", 1, &ImageConverter::depthInfoPoseCb, this);        // subscribe distance
+    depth_pos_sub = nh_.subscribe("depth_info_dist", 1, &ImageConverter::depthInfoDistCb, this);        // subscribe distance
     cmd_vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel",1);                                     // publish velocity for following motion
   }
 
@@ -188,7 +188,7 @@ i
   // This call back function received the data which is distance from depth_info(node) using kinect
   // Distance is more exact than distance from opencv
   // We'll use depth_Distance variable to following motion
-  void depthInfoPoseCb(const geometry_msgs::Pose& distance)
+  void depthInfoDistCb(const geometry_msgs::Pose& distance)
   {
     depth_Distance = distance.position.z;
 
@@ -299,7 +299,6 @@ i
 
         robot_posX = posX;
         robot_posY = posY;
-
         //std::cout << "robot_posX - width_center : " << fabs(robot_posX - width_center)/100 << std::endl;
       }
 
@@ -333,9 +332,9 @@ i
     //cv::Rect rect(320-40, 240-30, 80, 60);
     //cv::rectangle(cv_ptr->image, rect, cv::Scalar(0,0,255), 5);
     cv::imshow("origin", cv_ptr->image);
-    cv::imshow("threshold", threshold_frame);
-    cv::imshow("dilate", dilated);
-    cv::imshow("erode", eroded);
+    //cv::imshow("threshold", threshold_frame);
+    //cv::imshow("dilate", dilated);
+    //cv::imshow("erode", eroded);
     cv::waitKey(3);
 
     image_pub_.publish(cv_ptr->toImageMsg());
