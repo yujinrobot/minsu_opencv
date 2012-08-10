@@ -12,7 +12,7 @@
 #include <opencv2/core/core.hpp>        // Basic OpenCV structures (cv::Mat, Scalar)
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Pose.h>
-
+ 
 namespace enc = sensor_msgs::image_encodings;
 
 static const char WINDOW[] = "Image window";
