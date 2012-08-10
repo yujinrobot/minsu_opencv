@@ -159,20 +159,6 @@ i
     return result;
   }
 
-  // This call back function received the data which is distance from depth_info(node) using kinect
-  // Distance is more exact than distance from opencv
-  // We'll use depth_Distance variable to following motion
-  void depthInfoPoseCb(const geometry_msgs::Pose& distance)
-  {
-    depth_Distance = distance.position.z;
-
-    if(!std::isnan(depth_Distance)) {
-      std::cout << "depth info distance : " << depth_Distance << std::endl;
-    } else {
-      std::cout << "distance value : [nan]" << std::endl;
-    }
-  }
-
   void cmd_vel_command()
   {
     geometry_msgs::Twist cmd;
@@ -207,6 +193,20 @@ i
     {
       cmd.angular.z = 0.5;
       cmd_vel_pub.publish(cmd);
+    }
+  }
+
+  // This call back function received the data which is distance from depth_info(node) using kinect
+  // Distance is more exact than distance from opencv
+  // We'll use depth_Distance variable to following motion
+  void depthInfoPoseCb(const geometry_msgs::Pose& distance)
+  {
+    depth_Distance = distance.position.z;
+
+    if(!std::isnan(depth_Distance)) {
+      std::cout << "depth info distance : " << depth_Distance << std::endl;
+    } else {
+      std::cout << "distance value : [nan]" << std::endl;
     }
   }
 
