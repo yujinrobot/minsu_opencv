@@ -12,9 +12,9 @@
 #include <opencv2/core/core.hpp>        // Basic OpenCV structures (cv::Mat, Scalar)
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Pose.h>
-
+   
 namespace enc = sensor_msgs::image_encodings;
-
+ 
 static const char WINDOW[] = "Image window";
 
 class ImageConverter
@@ -45,11 +45,10 @@ public:
   int robot_posX;
   int robot_posY;
   int minDetect;
-  int flag;
 
 
   ImageConverter()
-    : it_(nh_), depth_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.85), flag(0)
+    : it_(nh_), depth_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.85)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -80,8 +79,8 @@ public:
     result1.create(frame.rows, frame.cols, CV_8U);
     result2.create(frame.rows, frame.cols, CV_8U);
     result.create(frame.rows, frame.cols, CV_8U);
-    cv::inRange(converted, cv::Scalar(0,100,150), cv::Scalar(4,255,255), result1);
-    cv::inRange(converted, cv::Scalar(170,150,180),cv::Scalar(179,255,255),result2);
+    cv::inRange(converted, cv::Scalar(0,160,180), cv::Scalar(2,255,255), result1);
+    cv::inRange(converted, cv::Scalar(170,160,180),cv::Scalar(179,255,255),result2);
     cv::bitwise_or(result1, result2, result);
 
     //cv::imshow("converted", converted);
@@ -159,6 +158,33 @@ i
     return result;
   }
 
+  void cmd_vel_command()
+  {
+    geometry_msgs::Twist cmd;
+
+    if (depth_Distance < 2 && depth_Distance > minDetect) {
+      //cmd.linear.x = depth_Distance-0.5;
+      cmd.linear.x = 0.3;
+      if (robot_posX > width_center) {
+        //cmd.angular.z = -fabs(robot_posX - width_center)/100;
+        cmd.angular.z = -0.3;
+      } else if (robot_posX < width_center) {
+        //cmd.angular.z = fabs(robot_posX - width_center)/100;
+        cmd.angular.z = 0.3;
+      } else if (robot_posX == width_center) {
+        cmd.angular.z = 0.0;
+      }
+      cmd_vel_pub.publish(cmd);
+      std::cout << "depth_Distance : " << depth_Distance << " " << "detecting ball" << " " << "vel_x : " << cmd.linear.x << " " << "vel_z" << " " << cmd.angular.z << std::endl;
+    }
+    else if (depth_Distance < minDetect && depth_Distance > 0.65) {
+      std::cout << "depth_Distance : " << depth_Distance << " " << "stop command" << std::endl;
+      cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
+      //depth_Distance = 0;
+    }
+  }
+
+
   // This call back function received the data which is distance from depth_info(node) using kinect
   // Distance is more exact than distance from opencv
   // We'll use depth_Distance variable to following motion
@@ -170,43 +196,6 @@ i
       std::cout << "depth info distance : " << depth_Distance << std::endl;
     } else {
       std::cout << "distance value : [nan]" << std::endl;
-    }
-  }
-
-  void cmd_vel_command()
-  {
-    geometry_msgs::Twist cmd;
-
-    if (flag == 1)
-    {
-      if (depth_Distance < 2 && depth_Distance > minDetect) {
-        //cmd.linear.x = depth_Distance-0.5;
-        cmd.linear.x = 0.3;
-        if (robot_posX > width_center) {
-          //cmd.angular.z = -fabs(robot_posX - width_center)/100;
-          cmd.angular.z = -0.3;
-        } else if (robot_posX < width_center) {
-          //cmd.angular.z = fabs(robot_posX - width_center)/100;
-          cmd.angular.z = 0.3;
-        } else if (robot_posX == width_center) {
-          cmd.angular.z = 0.0;
-        }
-        cmd_vel_pub.publish(cmd);
-        std::cout << "depth_Distance : " << depth_Distance << " " << "detecting ball" << " " << "vel_x : " << cmd.linear.x << " " << "vel_z" << " " << cmd.angular.z << std::endl;
-      }
-
-      else if (depth_Distance < minDetect && depth_Distance > 0.65) {
-        std::cout << "depth_Distance : " << depth_Distance << " " << "stop command" << std::endl;
-        cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
-        //depth_Distance = 0;
-      }
-    }
-
-    // flag = 0
-    else
-    {
-      cmd.angular.z = 0.5;
-      cmd_vel_pub.publish(cmd);
     }
   }
 
@@ -231,13 +220,18 @@ i
     cv::Mat kernel = cv::getStructuringElement(2, cv::Size( 3, 3 ), cv::Point( -1, -1 ));
 
     // Dilate the frame
-    cv::dilate(threshold_frame, dilated, kernel, cv::Point(-1,-1), 7);
+    cv::dilate(threshold_frame, dilated, kernel, cv::Point(-1,-1), 5);
 
     // Erode the frame
-    cv::erode(dilated, eroded, kernel, cv::Point(-1,-1), 5);
+    cv::erode(dilated, eroded, kernel, cv::Point(-1,-1), 3);
 
     // for saving the eroded frame
     clone_eroded = eroded.clone();
+
+
+    /*
+    // pre-smoothing improves Hough detector
+    cv::GaussianBlur(clone_eroded, clone_eroded, cv::Size(3,3), 1.5);
 
     // hough circle algorithm
     std::vector<cv::Vec3f> circles;
@@ -249,7 +243,7 @@ i
       cv::circle(cv_ptr->image, cv::Point( (*itc)[0], (*itc)[1]) , (*itc)[2], cv::Scalar(255,0,0), 20);
       ++itc;
     }
-
+    */
 
 
     std::vector< std::vector<cv::Point> > contours;     // storage for the contours
@@ -293,10 +287,6 @@ i
 
 
 
-
-
-
-
         // ball centroid
         cv::Moments mom = cv::moments(threshold_frame);
         cv::circle(cv_ptr->image, cv::Point(mom.m10/mom.m00, mom.m01/mom.m00), 10, cv::Scalar(0.8, 0.2, 0.2), 2);
@@ -310,40 +300,47 @@ i
         robot_posX = posX;
         robot_posY = posY;
 
-        // ball position publish
-        geometry_msgs::Pose pos;
-        pos.position.x = robot_posX;
-        pos.position.y = robot_posY;
-        pos_pub.publish(pos);
-        std::cout << "kobuki find a ball & publish ball position to depth_info node" << std::endl;
-        flag = 1;
         //std::cout << "robot_posX - width_center : " << fabs(robot_posX - width_center)/100 << std::endl;
       }
 
-      // can't find a ball
-      else {
-        //opencv_Distance = 0;
-        robot_posX = 0;
-        robot_posY = 0;
-        flag = 0;
-        std::cout << "find contour but kobuki can't find the ball" << std::endl;
-      }
       //std::cout << "circularity " << circularity << std::endl;
       //std::cout << "we have " << contours.size() << " contours --> " << no_ellipse << " found" << std::endl;
+      //std::cout << " x : " << robot_posX << " y : " << robot_posY << " opencv_Distance : " << opencv_Distance << std::endl;
     }
-    //std::cout << " x : " << robot_posX << " y : " << robot_posY << " opencv_Distance : " << opencv_Distance << std::endl;
+
+
+    if (no_ellipse > 0 && no_ellipse < 2) {
+      // ball position publish
+      geometry_msgs::Pose pos;
+      pos.position.x = robot_posX;
+      pos.position.y = robot_posY;
+      pos_pub.publish(pos);
+      std::cout << "find a ball & publish ball pose : " << pos.position.x << " , " << pos.position.y << " depth_Dist : "<< depth_Distance << std::endl;
+    }
+
+    // can't find a ball
+    else {
+      robot_posX = 0;
+      robot_posY = 0;
+      std::cout << "kobuki can't find the ball" << std::endl;
+    }
+
+
+
 
     //cmd_vel_command();
 
     //cv::Rect rect(320-40, 240-30, 80, 60);
     //cv::rectangle(cv_ptr->image, rect, cv::Scalar(0,0,255), 5);
     cv::imshow("origin", cv_ptr->image);
-
-    //cv::imshow("threshold", threshold_frame);
+    cv::imshow("threshold", threshold_frame);
+    cv::imshow("dilate", dilated);
+    cv::imshow("erode", eroded);
     cv::waitKey(3);
 
     image_pub_.publish(cv_ptr->toImageMsg());
   }
+
 
   /*
   // based on depth information
