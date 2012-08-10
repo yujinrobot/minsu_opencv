@@ -80,7 +80,7 @@ public:
     result1.create(frame.rows, frame.cols, CV_8U);
     result2.create(frame.rows, frame.cols, CV_8U);
     result.create(frame.rows, frame.cols, CV_8U);
-    cv::inRange(converted, cv::Scalar(0,160,150), cv::Scalar(4,255,255), result1);
+    cv::inRange(converted, cv::Scalar(0,160,180), cv::Scalar(2,255,255), result1);
     cv::inRange(converted, cv::Scalar(170,160,180),cv::Scalar(179,255,255),result2);
     cv::bitwise_or(result1, result2, result);
 
