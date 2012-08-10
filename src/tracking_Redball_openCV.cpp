@@ -40,14 +40,15 @@ public:
   cv::Mat threshold_frame;
   double opencv_Distance;
   double depth_Distance;     // transmitted from depth_info node
+  double minDetect;
   bool detection;
   int width_center;
   int robot_posX;
   int robot_posY;
-  int minDetect;
+
 
   ImageConverter()
-    : it_(nh_), depth_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.90)
+    : it_(nh_), depth_Distance(0), minDetect(0.90), width_center(320), robot_posX(0), robot_posY(0)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -180,7 +181,6 @@ i
     else if (depth_Distance < minDetect && depth_Distance > 0.65) {
       std::cout << "depth_Distance : " << depth_Distance << " " << "stop command" << std::endl;
       cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
-      //depth_Distance = 0;
     }
   }
 
