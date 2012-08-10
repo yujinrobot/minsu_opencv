@@ -45,13 +45,9 @@ public:
   int robot_posX;
   int robot_posY;
   int minDetect;
-  int robot_x;
-  int robot_y;
-
-
 
   ImageConverter()
-    : it_(nh_), depth_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.85), robot_x(0), robot_y(0)
+    : it_(nh_), depth_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.85)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -193,13 +189,11 @@ i
   // We'll use depth_Distance variable to following motion
   void depthInfoDistCb(const geometry_msgs::Pose& distance)
   {
-    robot_x = distance.position.x;
-    robot_y = distance.position.y;
     depth_Distance = distance.position.z;
 
     if(!std::isnan(depth_Distance)) {
+      std::cout << "x : " << robot_posX << " y : " << robot_posY << " depth info distance : " << depth_Distance << std::endl;
       cmd_vel_command();
-      std::cout << "x : " << robot_x << " y : " << robot_y << " depth info distance : " << depth_Distance << std::endl;
     } else {
       std::cout << "distance value : [nan]" << std::endl;
     }
