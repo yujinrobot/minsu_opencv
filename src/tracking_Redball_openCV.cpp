@@ -239,9 +239,13 @@ i
     // for saving the eroded frame
     clone_eroded = eroded.clone();
 
+
+    // pre-smoothing improves Hough detector
+    cv::GaussianBlur(clone_eroded, clone_eroded, cv::Size(3,3), 1.5);
+
     // hough circle algorithm
     std::vector<cv::Vec3f> circles;
-    cv::HoughCircles(threshold_frame, circles, CV_HOUGH_GRADIENT, 2, 200, 200, 100, 25, 100);
+    cv::HoughCircles(clone_eroded, circles, CV_HOUGH_GRADIENT, 2, 200, 200, 100, 25, 100);
     std::vector<cv::Vec3f>::const_iterator itc = circles.begin();
 
     while(itc!=circles.end()) {
@@ -292,10 +296,6 @@ i
 
 
 
-
-
-
-
         // ball centroid
         cv::Moments mom = cv::moments(threshold_frame);
         cv::circle(cv_ptr->image, cv::Point(mom.m10/mom.m00, mom.m01/mom.m00), 10, cv::Scalar(0.8, 0.2, 0.2), 2);
@@ -332,13 +332,13 @@ i
     }
     //std::cout << " x : " << robot_posX << " y : " << robot_posY << " opencv_Distance : " << opencv_Distance << std::endl;
 
-    cmd_vel_command();
+    //cmd_vel_command();
 
     //cv::Rect rect(320-40, 240-30, 80, 60);
     //cv::rectangle(cv_ptr->image, rect, cv::Scalar(0,0,255), 5);
     cv::imshow("origin", cv_ptr->image);
-
-    //cv::imshow("threshold", threshold_frame);
+    cv::imshow("threshold", threshold_frame);
+    cv::imshow("erode", clone_eroded);
     cv::waitKey(3);
 
     image_pub_.publish(cv_ptr->toImageMsg());
