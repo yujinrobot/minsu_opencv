@@ -45,10 +45,13 @@ public:
   int robot_posX;
   int robot_posY;
   int minDetect;
+  int robot_x;
+  int robot_y;
+
 
 
   ImageConverter()
-    : it_(nh_), depth_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.85)
+    : it_(nh_), depth_Distance(0), width_center(320), robot_posX(0), robot_posY(0), minDetect(0.85), robot_x(0), robot_y(0)
   {
     ros::Time::init();
     ros::Duration du(5.0);
@@ -190,10 +193,13 @@ i
   // We'll use depth_Distance variable to following motion
   void depthInfoDistCb(const geometry_msgs::Pose& distance)
   {
+    robot_x = distance.position.x;
+    robot_y = distance.position.y;
     depth_Distance = distance.position.z;
 
     if(!std::isnan(depth_Distance)) {
-      std::cout << "depth info distance : " << depth_Distance << std::endl;
+      cmd_vel_command();
+      std::cout << "x : " << robot_x << " y : " << robot_y << " depth info distance : " << depth_Distance << std::endl;
     } else {
       std::cout << "distance value : [nan]" << std::endl;
     }
@@ -314,7 +320,7 @@ i
       pos.position.x = robot_posX;
       pos.position.y = robot_posY;
       pos_pub.publish(pos);
-      std::cout << "find a ball & publish ball pose : " << pos.position.x << " , " << pos.position.y << " depth_Dist : "<< depth_Distance << std::endl;
+      std::cout << "find a ball & publish ball pose : " << pos.position.x << " , " << pos.position.y << std::endl;
     }
 
     // can't find a ball
@@ -339,7 +345,6 @@ i
 
     image_pub_.publish(cv_ptr->toImageMsg());
   }
-
 
   /*
   // based on depth information
@@ -409,7 +414,6 @@ i
     }
   }
   */
-
 
   // It is test function.
   void test()
