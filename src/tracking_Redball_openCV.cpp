@@ -246,11 +246,12 @@ i
 
     // hough circle algorithm
     std::vector<cv::Vec3f> circles;
-    cv::HoughCircles(clone_eroded, circles, CV_HOUGH_GRADIENT, 2, 200, 200, 100, 25, 100);
+    cv::HoughCircles(threshold_frame, circles, CV_HOUGH_GRADIENT, 2, 200, 200, 100, 0.01, 500);
     std::vector<cv::Vec3f>::const_iterator itc = circles.begin();
 
     while(itc!=circles.end()) {
-      cv::circle(cv_ptr->image, cv::Point( (*itc)[0], (*itc)[1]) , (*itc)[2], cv::Scalar(255), 2);
+      std::cout << "hough algorithm" << std::endl;
+      cv::circle(cv_ptr->image, cv::Point( (*itc)[0], (*itc)[1]) , (*itc)[2], cv::Scalar(255,0,0), 20);
       ++itc;
     }
     */
