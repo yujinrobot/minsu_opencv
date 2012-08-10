@@ -315,7 +315,7 @@ i
       pos.position.x = robot_posX;
       pos.position.y = robot_posY;
       pos_pub.publish(pos);
-      std::cout << "kobuki find a ball & publish ball position to depth_info node" << std::endl;
+      std::cout << "kobuki find a ball & publish ball pose : " << pos.position.x << " , " << pos.position.y << std::endl;
     }
 
     // can't find a ball
