@@ -134,7 +134,6 @@ public:
 
     cv::Rect roi = cv::Rect(320-40, 240-30, 80, 60);
     cv::Mat cropped = converted(roi);
-i
     it= cropped.begin<cv::Vec3b>();
     itend= cropped.end<cv::Vec3b>();
 
@@ -163,22 +162,21 @@ i
     geometry_msgs::Twist cmd;
 
     if (depth_Distance < 2 && depth_Distance > minDetect) {
-      //cmd.linear.x = depth_Distance-0.5;
-      cmd.linear.x = 0.2;
+      cmd.linear.x = depth_Distance-0.65;
+      //cmd.linear.x = 0.2;
       if (robot_posX > width_center) {
-        //cmd.angular.z = -fabs(robot_posX - width_center)/100;
-        cmd.angular.z = -0.2;
+        cmd.angular.z = -fabs(robot_posX - width_center)/100;
+        //cmd.angular.z = -0.2;
       } else if (robot_posX < width_center) {
-        //cmd.angular.z = fabs(robot_posX - width_center)/100;
-        cmd.angular.z = 0.2;
+        cmd.angular.z = fabs(robot_posX - width_center)/100;
+        //cmd.angular.z = 0.2;
       } else if (robot_posX == width_center) {
         cmd.angular.z = 0.0;
       }
       cmd_vel_pub.publish(cmd);
       std::cout << "depth_Distance : " << depth_Distance << " " << "detecting ball" << " " << "vel_x : " << cmd.linear.x << " " << "vel_z" << " " << cmd.angular.z << std::endl;
       printf("\n");
-    }
-
+	}
     else if (depth_Distance < minDetect && depth_Distance > 0.65) {
       std::cout << "depth_Distance : " << depth_Distance << " " << "stop command" << std::endl;
       cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
@@ -250,7 +248,7 @@ i
 
 
     std::vector< std::vector<cv::Point> > contours;     // storage for the contours
-    std::vector<cv::Vec4i> hierarchy;                   // hierachyminDetect
+    std::vector<cv::Vec4type filter texti> hierarchy;                   // hierachyminDetect
 
     // for saving the result frame
     //origin_result = result.clone();

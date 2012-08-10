@@ -36,10 +36,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /opt/kobuki/minsu/temp/minsu_opencv
+CMAKE_SOURCE_DIR = /opt/kobuki/minsu/minsu_opencv
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /opt/kobuki/minsu/temp/minsu_opencv/build
+CMAKE_BINARY_DIR = /opt/kobuki/minsu/minsu_opencv/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -66,14 +66,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(CMAKE_COMMAND) -E cmake_progress_start /opt/kobuki/minsu/temp/minsu_opencv/build/CMakeFiles /opt/kobuki/minsu/temp/minsu_opencv/build/src/CMakeFiles/progress.marks
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /opt/kobuki/minsu/temp/minsu_opencv/build/CMakeFiles 0
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(CMAKE_COMMAND) -E cmake_progress_start /opt/kobuki/minsu/minsu_opencv/build/CMakeFiles /opt/kobuki/minsu/minsu_opencv/build/src/CMakeFiles/progress.marks
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /opt/kobuki/minsu/minsu_opencv/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -82,36 +82,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
-src/CMakeFiles/test.dir/rule:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/test.dir/rule
-.PHONY : src/CMakeFiles/test.dir/rule
-
-# Convenience name for target.
-test: src/CMakeFiles/test.dir/rule
-.PHONY : test
-
-# fast build rule for target.
-test/fast:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/test.dir/build.make src/CMakeFiles/test.dir/build
-.PHONY : test/fast
-
-# Convenience name for target.
 src/CMakeFiles/tracking_Redball_openCV.dir/rule:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/tracking_Redball_openCV.dir/rule
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/tracking_Redball_openCV.dir/rule
 .PHONY : src/CMakeFiles/tracking_Redball_openCV.dir/rule
 
 # Convenience name for target.
@@ -120,37 +106,22 @@ tracking_Redball_openCV: src/CMakeFiles/tracking_Redball_openCV.dir/rule
 
 # fast build rule for target.
 tracking_Redball_openCV/fast:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/tracking_Redball_openCV.dir/build.make src/CMakeFiles/tracking_Redball_openCV.dir/build
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/tracking_Redball_openCV.dir/build.make src/CMakeFiles/tracking_Redball_openCV.dir/build
 .PHONY : tracking_Redball_openCV/fast
 
 # target to build an object file
-test.o:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/test.dir/build.make src/CMakeFiles/test.dir/test.o
-.PHONY : test.o
-
-# target to preprocess a source file
-test.i:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/test.dir/build.make src/CMakeFiles/test.dir/test.i
-.PHONY : test.i
-
-# target to generate assembly for a file
-test.s:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/test.dir/build.make src/CMakeFiles/test.dir/test.s
-.PHONY : test.s
-
-# target to build an object file
 tracking_Redball_openCV.o:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/tracking_Redball_openCV.dir/build.make src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.o
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/tracking_Redball_openCV.dir/build.make src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.o
 .PHONY : tracking_Redball_openCV.o
 
 # target to preprocess a source file
 tracking_Redball_openCV.i:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/tracking_Redball_openCV.dir/build.make src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.i
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/tracking_Redball_openCV.dir/build.make src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.i
 .PHONY : tracking_Redball_openCV.i
 
 # target to generate assembly for a file
 tracking_Redball_openCV.s:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/tracking_Redball_openCV.dir/build.make src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.s
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(MAKE) -f src/CMakeFiles/tracking_Redball_openCV.dir/build.make src/CMakeFiles/tracking_Redball_openCV.dir/tracking_Redball_openCV.s
 .PHONY : tracking_Redball_openCV.s
 
 # Help Target
@@ -161,11 +132,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... test"
 	@echo "... tracking_Redball_openCV"
-	@echo "... test.o"
-	@echo "... test.i"
-	@echo "... test.s"
 	@echo "... tracking_Redball_openCV.o"
 	@echo "... tracking_Redball_openCV.i"
 	@echo "... tracking_Redball_openCV.s"
@@ -180,6 +147,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /opt/kobuki/minsu/temp/minsu_opencv/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /opt/kobuki/minsu/minsu_opencv/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
