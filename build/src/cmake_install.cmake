@@ -1,4 +1,4 @@
-# Install script for directory: /opt/kobuki/minsu/minsu_opencv/src
+# Install script for directory: /opt/kobuki/minsu/temp/minsu_opencv/src
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
