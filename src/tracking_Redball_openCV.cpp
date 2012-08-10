@@ -248,7 +248,7 @@ public:
 
 
     std::vector< std::vector<cv::Point> > contours;     // storage for the contours
-    std::vector<cv::Vec4type filter texti> hierarchy;                   // hierachyminDetect
+    std::vector<cv::Vec4i> hierarchy;                   // hierachyminDetect
 
     // for saving the result frame
     //origin_result = result.clone();
