@@ -14,7 +14,7 @@
 #include <geometry_msgs/Pose.h>
  
 namespace enc = sensor_msgs::image_encodings;
-
+ 
 static const char WINDOW[] = "Image window";
 
 class ImageConverter
