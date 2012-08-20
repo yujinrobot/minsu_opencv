@@ -176,7 +176,7 @@ public:
       cmd_vel_pub.publish(cmd);
       std::cout << "depth_Distance : " << depth_Distance << " " << "detecting ball" << " " << "vel_x : " << cmd.linear.x << " " << "vel_z" << " " << cmd.angular.z << std::endl;
       printf("\n");
-	}
+        }
     else if (depth_Distance < minDetect && depth_Distance > 0.65) {
       std::cout << "depth_Distance : " << depth_Distance << " " << "stop command" << std::endl;
       cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
