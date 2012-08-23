@@ -162,7 +162,7 @@ public:
     geometry_msgs::Twist cmd;
 
     if (depth_Distance < 2 && depth_Distance > minDetect) {
-      cmd.linear.x = depth_Distance-0.65;
+      cmd.linear.x = depth_Distance-0.95;
       //cmd.linear.x = 0.2;
       if (robot_posX > width_center) {
         cmd.angular.z = -fabs(robot_posX - width_center)/100;
