@@ -14,22 +14,6 @@
 #include <geometry_msgs/Pose.h>
 
 namespace enc = sensor_msgs::image_encodings;
-#include <iostream> // for standard I/O
-#include <string>   // for strings
-#include <iomanip>  // for controlling float print precision
-#include <sstream>  // string to number conversion
-#include <stdio.h>
-#include <ros/ros.h>
-#include <image_transport/image_transport.h>
-#include <cv_bridge/cv_bridge.h>
-#include <sensor_msgs/image_encodings.h>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/core/core.hpp>        // Basic OpenCV structures (cv::Mat, Scalar)
-#include <geometry_msgs/Twist.h>
-#include <geometry_msgs/Pose.h>
-
-namespace enc = sensor_msgs::image_encodings;
 
 static const char WINDOW[] = "Image window";
 
