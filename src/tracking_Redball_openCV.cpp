@@ -50,7 +50,7 @@ public:
   ImageConverter()
     : it_(nh_), depth_Distance(0), minDetect(0.85), width_center(320), robot_posX(0), robot_posY(0)
   {
-    ros::Duration du(5.0);
+    ros::Duration du(2.0);
     du.sleep();
 
     image_pub_ = it_.advertise("out", 1);
