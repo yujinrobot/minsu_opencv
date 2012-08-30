@@ -15,8 +15,6 @@
 
 namespace enc = sensor_msgs::image_encodings;
 
-static const char WINDOW[] = "Image window";
-
 class ImageConverter
 {
   ros::NodeHandle nh_;
@@ -61,10 +59,6 @@ public:
     cmd_vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel",1);                                     // publish velocity for following motion
   }
 
-  ~ImageConverter()
-  {
-    cv::destroyWindow(WINDOW);
-  }
 
   cv::Mat threshold(const cv::Mat& frame)
   {
@@ -180,7 +174,7 @@ public:
         no_ellipse ++;
 
         // ball centroid
-        cv::Moments mom = cv::moments(threshold_frame);
+        cv::Moments mom = cv::moments(clone_eroded);
         cv::circle(cv_ptr->image, cv::Point(mom.m10/mom.m00, mom.m01/mom.m00), 10, cv::Scalar(0.8, 0.2, 0.2), 2);
 
         static int posX = 0;
@@ -199,8 +193,8 @@ public:
       //std::cout << " x : " << robot_posX << " y : " << robot_posY << " opencv_Distance : " << opencv_Distance << std::endl;
     }
 
+    // ball position publish
     if (no_ellipse > 0 && no_ellipse < 2) {
-      // ball position publish
       geometry_msgs::Pose pos;
       pos.position.x = robot_posX;
       pos.position.y = robot_posY;
