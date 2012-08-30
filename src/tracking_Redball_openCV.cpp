@@ -174,7 +174,6 @@ public:
         no_ellipse ++;
 
         // ball centroid
-        //cv::Moments mom = cv::moments(threshold_frame);
         cv::circle(cv_ptr->image, cv::Point(mom.m10/mom.m00, mom.m01/mom.m00), 10, cv::Scalar(0.8, 0.2, 0.2), 2);
 
         static int posX = 0;
