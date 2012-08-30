@@ -46,7 +46,7 @@ public:
 
 
   ImageConverter()
-    : it_(nh_), depth_Distance(0), minDetect(0.85), width_center(320), robot_posX(0), robot_posY(0)
+    : it_(nh_), depth_Distance(0), minDetect(0.80), width_center(320), robot_posX(0), robot_posY(0)
   {
     ros::Duration du(2.0);
     du.sleep();
@@ -86,22 +86,30 @@ public:
       cmd.linear.x = depth_Distance-0.95;
       //cmd.linear.x = 0.2;
       if (robot_posX > width_center) {
-        cmd.angular.z = -fabs(robot_posX - width_center)/100;
+        cmd.angular.z = -fabs(robot_posX - width_center)/1000;
         //cmd.angular.z = -0.2;
       } else if (robot_posX < width_center) {
-        cmd.angular.z = fabs(robot_posX - width_center)/100;
+        cmd.angular.z = fabs(robot_posX - width_center)/1000;
         //cmd.angular.z = 0.2;
       } else if (robot_posX == width_center) {
         cmd.angular.z = 0.0;
       }
-      cmd_vel_pub.publish(cmd);
-      std::cout << "depth_Distance : " << depth_Distance << " " << "detecting ball" << " " << "vel_x : " << cmd.linear.x << " " << "vel_z" << " " << cmd.angular.z << std::endl;
-      printf("\n");
-	}
+      //cmd_vel_pub.publish(cmd);
+      //printf("linear vel : %.4f angular_vel : %.4f\n", cmd.linear.x, cmd.angular.z);
+      //printf("\n");
+    }
     else if (depth_Distance < minDetect && depth_Distance > 0.65) {
+      std::cout << "depth_Distance : " << depth_Distance << " " << "move to back..." << std::endl;
+      cmd.linear.x = depth_Distance-1.1;	
+    }
+    //else if (depth_Distance < minDetect && depth_Distance > 0.65) {
+    else if (depth_Distance < 0.65) {
       std::cout << "depth_Distance : " << depth_Distance << " " << "stop command" << std::endl;
       cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
     }
+    cmd_vel_pub.publish(cmd);
+    printf("linear vel : %.4f angular_vel : %.4f\n", cmd.linear.x, cmd.angular.z);
+    printf("\n");
   }
 
 
