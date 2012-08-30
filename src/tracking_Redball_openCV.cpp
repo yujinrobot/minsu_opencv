@@ -226,7 +226,7 @@ public:
     }
 
     cv::imshow("origin", cv_ptr->image);
-    //cv::imshow("threshold", threshold_frame);
+    cv::imshow("threshold", threshold_frame);
     //cv::imshow("dilate", dilated);
     //cv::imshow("erode", eroded);
     cv::waitKey(3);
