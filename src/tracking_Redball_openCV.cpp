@@ -12,7 +12,7 @@
 #include <opencv2/core/core.hpp>        // Basic OpenCV structures (cv::Mat, Scalar)
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Pose.h>
- 
+
 namespace enc = sensor_msgs::image_encodings;
 
 class ImageConverter
@@ -44,7 +44,6 @@ public:
   int robot_posX;
   int robot_posY;
 
-
   ImageConverter()
     : it_(nh_), depth_Distance(0), minDetect(0.80), width_center(320), robot_posX(0), robot_posY(0)
   {
@@ -58,7 +57,6 @@ public:
     depth_pos_sub = nh_.subscribe("depth_info_dist", 1, &ImageConverter::depthInfoDistCb, this);        // subscribe distance
     cmd_vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel",1);                                     // publish velocity for following motion
   }
-
 
   cv::Mat threshold(const cv::Mat& frame)
   {
@@ -84,25 +82,18 @@ public:
 
     if (depth_Distance < 2 && depth_Distance > minDetect) {
       cmd.linear.x = depth_Distance-0.95;
-      //cmd.linear.x = 0.2;
       if (robot_posX > width_center) {
         cmd.angular.z = -fabs(robot_posX - width_center)/1000;
-        //cmd.angular.z = -0.2;
       } else if (robot_posX < width_center) {
         cmd.angular.z = fabs(robot_posX - width_center)/1000;
-        //cmd.angular.z = 0.2;
       } else if (robot_posX == width_center) {
         cmd.angular.z = 0.0;
       }
-      //cmd_vel_pub.publish(cmd);
-      //printf("linear vel : %.4f angular_vel : %.4f\n", cmd.linear.x, cmd.angular.z);
-      //printf("\n");
     }
     else if (depth_Distance < minDetect && depth_Distance > 0.65) {
       std::cout << "depth_Distance : " << depth_Distance << " " << "move to back..." << std::endl;
       cmd.linear.x = depth_Distance-1.1;	
     }
-    //else if (depth_Distance < minDetect && depth_Distance > 0.65) {
     else if (depth_Distance < 0.65) {
       std::cout << "depth_Distance : " << depth_Distance << " " << "stop command" << std::endl;
       cmd_vel_pub.publish(geometry_msgs::Twist()); // zero msg
@@ -111,7 +102,6 @@ public:
     printf("linear vel : %.4f angular_vel : %.4f\n", cmd.linear.x, cmd.angular.z);
     printf("\n");
   }
-
 
   // This call back function received the data which is distance from depth_info(node) using kinect
   // Distance is more exact than distance from opencv
@@ -192,9 +182,7 @@ public:
 
         robot_posX = posX;
         robot_posY = posY;
-        //std::cout << "robot_posX - width_center : " << fabs(robot_posX - width_center)/100 << std::endl;
       }
-
       //std::cout << "circularity " << circularity << std::endl;
       //std::cout << "we have " << contours.size() << " contours --> " << no_ellipse << " found" << std::endl;
       //std::cout << " x : " << robot_posX << " y : " << robot_posY << " opencv_Distance : " << opencv_Distance << std::endl;
