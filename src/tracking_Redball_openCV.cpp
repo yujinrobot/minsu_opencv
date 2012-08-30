@@ -71,7 +71,7 @@ public:
     result1.create(frame.rows, frame.cols, CV_8U);
     result2.create(frame.rows, frame.cols, CV_8U);
     result.create(frame.rows, frame.cols, CV_8U);
-    cv::inRange(converted, cv::Scalar(0,200,120), cv::Scalar(1,255,255), result1);
+    cv::inRange(converted, cv::Scalar(0,200,120), cv::Scalar(2,255,255), result1);
     cv::inRange(converted, cv::Scalar(170,200,120),cv::Scalar(179,255,255),result2);
     cv::bitwise_or(result1, result2, result);
 
@@ -161,8 +161,8 @@ public:
     {
       if( contours[i].size() < 25 ) continue;
       cv::drawContours( cv_ptr->image, contours, i, cv::Scalar(255,0,0), 1, 8 );
-      cv::Moments moms = cv::moments( cv::Mat(contours[i]));
-      double area = moms.m00;
+      cv::Moments mom = cv::moments( cv::Mat(contours[i]));
+      double area = mom.m00;
       double perimeter = cv::arcLength(cv::Mat(contours[i]),true);
       double circularity = 4*CV_PI*area/(perimeter*perimeter);
 
@@ -174,7 +174,7 @@ public:
         no_ellipse ++;
 
         // ball centroid
-        cv::Moments mom = cv::moments(threshold_frame);
+        //cv::Moments mom = cv::moments(threshold_frame);
         cv::circle(cv_ptr->image, cv::Point(mom.m10/mom.m00, mom.m01/mom.m00), 10, cv::Scalar(0.8, 0.2, 0.2), 2);
 
         static int posX = 0;
