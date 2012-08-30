@@ -205,7 +205,7 @@ public:
       pos.position.x = robot_posX;
       pos.position.y = robot_posY;
       pos_pub.publish(pos);
-      //std::cout << "find a ball & publish ball pose : " << pos.position.x << " , " << pos.position.y << std::endl;
+      std::cout << "find a ball & publish ball pose : " << pos.position.x << " , " << pos.position.y << std::endl;
     }
 
     // can't find a ball
