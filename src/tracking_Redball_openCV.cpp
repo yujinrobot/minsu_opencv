@@ -50,7 +50,6 @@ public:
   ImageConverter()
     : it_(nh_), depth_Distance(0), minDetect(0.85), width_center(320), robot_posX(0), robot_posY(0)
   {
-    ros::Time::init();
     ros::Duration du(5.0);
     du.sleep();
 
@@ -130,9 +129,6 @@ public:
 
   void imageCb(const sensor_msgs::ImageConstPtr& msg)
   {
-    ros::Time whole_time_start = ros::Time::now();
-
-    ros::Time cv_brige_start = ros::Time::now();
     cv_bridge::CvImagePtr cv_ptr;
     try
     {
@@ -143,10 +139,7 @@ public:
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
     }
-    ros::Time cv_brige_end = ros::Time::now();
 
-
-    ros::Time threshold_start = ros::Time::now();
     // function call
     threshold_frame = threshold(cv_ptr->image);
 
@@ -158,12 +151,10 @@ public:
 
     // Erode the frame
     cv::erode(dilated, eroded, kernel, cv::Point(-1,-1), 3);
-    ros::Time threshold_end = ros::Time::now();
 
     // for saving the eroded frame
     clone_eroded = eroded.clone();
 
-    ros::Time contour_centroid_start = ros::Time::now();
     std::vector< std::vector<cv::Point> > contours;     // storage for the contours
     std::vector<cv::Vec4i> hierarchy;                   // hierachyminDetect
 
@@ -207,7 +198,6 @@ public:
       //std::cout << "we have " << contours.size() << " contours --> " << no_ellipse << " found" << std::endl;
       //std::cout << " x : " << robot_posX << " y : " << robot_posY << " opencv_Distance : " << opencv_Distance << std::endl;
     }
-    ros::Time contour_centroid_end = ros::Time::now();
 
     if (no_ellipse > 0 && no_ellipse < 2) {
       // ball position publish
@@ -233,11 +223,7 @@ public:
 
     image_pub_.publish(cv_ptr->toImageMsg());
 
-    ros::Time whole_time_end = ros::Time::now();
 
-    std::cout << "whole time                     : " << whole_time_end - whole_time_start << std::endl;
-    std::cout << "threshold time                 : " << threshold_end - threshold_start << std::endl;
-    std::cout << "find contour and centroid time : " << contour_centroid_end - contour_centroid_start << std::endl;
   }
 };
 
