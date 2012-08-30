@@ -1,5 +1,5 @@
-bin/
-build/
-lib/
-*.swp
-*.swo
+#bin/
+#build/
+#lib/
+#*.swp
+#*.swo
