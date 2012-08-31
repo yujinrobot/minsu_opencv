@@ -186,7 +186,9 @@ public:
 
         double f= 700;
         openCV_Distance = 3 * f / radius_i;
-        printf("R | Z = %f | %f\n", radius_i, double(openCV_Distance) );
+        //printf("R | Z = %f | %f\n", radius_i, double(openCV_Distance) );
+		std::cout << "radius : " << radius_i << " distance : " << openCV_Distance << std::endl; 
+
 
       }
       //std::cout << "circularity " << circularity << std::endl;
