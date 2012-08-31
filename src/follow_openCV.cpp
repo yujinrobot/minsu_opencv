@@ -101,21 +101,6 @@ public:
     printf("\n");
   }
 
-//  // This call back function received the data which is distance from depth_info(node) using kinect
-//  // Distance is more exact than distance from opencv
-//  // We'll use depth_Distance variable to following motion
-//  void depthInfoDistCb(const geometry_msgs::Pose& distance)
-//  {
-//    depth_Distance = distance.position.z;
-//
-//    if(!std::isnan(depth_Distance)) {
-//      std::cout << "find a ball & publish ball pose" << std::endl;
-//      std::cout << "x : " << robot_posX << " y : " << robot_posY << " depth info distance : " << depth_Distance << std::endl;
-//      cmd_vel_command();
-//    } else {
-//      std::cout << "distance value : [nan]" << std::endl;
-//    }
-//  }
 
   void imageCb(const sensor_msgs::ImageConstPtr& msg)
   {
@@ -185,9 +170,9 @@ public:
         double radius_i = (ellipse_candidate.size.height+ellipse_candidate.size.width)/4;
 
         double f= 700;
-        openCV_Distance = 3 * f / radius_i;
+        openCV_Distance = (3 * f / radius_i)/100;
         //printf("R | Z = %f | %f\n", radius_i, double(openCV_Distance) );
-		std::cout << "radius : " << radius_i << " distance : " << openCV_Distance << std::endl; 
+	std::cout << "radius : " << radius_i << " distance : " << openCV_Distance << std::endl; 
 
 
       }
@@ -197,22 +182,6 @@ public:
     }
 
     cmd_vel_command();
-
-//    // ball position publish
-//    if (no_ellipse > 0 && no_ellipse < 2) {
-//      geometry_msgs::Pose pos;
-//      pos.position.x = robot_posX;
-//      pos.position.y = robot_posY;
-//      pos_pub.publish(pos);
-//      //std::cout << "find a ball & publish ball pose : " << pos.position.x << " , " << pos.position.y << std::endl;
-//    }
-//
-//    // can't find a ball
-//    else {
-//      robot_posX = 0;
-//      robot_posY = 0;
-//      std::cout << "kobuki can't find the ball" << std::endl;
-//    }
 
     cv::imshow("origin", cv_ptr->image);
     cv::imshow("threshold", threshold_frame);
