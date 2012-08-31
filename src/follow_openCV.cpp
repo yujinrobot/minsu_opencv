@@ -53,7 +53,6 @@ public:
     image_sub_ = it_.subscribe("camera/rgb/image_color", 1, &ImageConverter::imageCb, this);
 
     pos_pub = nh_.advertise<geometry_msgs::Pose>("ball_info_pose",1);                                   // publish ball position
-    depth_pos_sub = nh_.subscribe("depth_info_dist", 1, &ImageConverter::depthInfoDistCb, this);        // subscribe distance
     cmd_vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel",1);                                     // publish velocity for following motion
   }
 
@@ -181,6 +180,9 @@ public:
 
         robot_posX = posX;
         robot_posY = posY;
+
+        // radius -> {(W+H)/2}/2
+        double radius_i = (ellipse_candidate.size.height+ellipse_candidate.size.width)/4;
 
         double f= 700;
         openCV_Distance = 3 * f / radius_i;
